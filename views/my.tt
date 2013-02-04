@@ -1,0 +1,9 @@
+[% META pagetitle = 'My page' %]
+
+[% USE Dumper %]
+
+<pre>
+[% Dumper.dump_html(session) %]
+</pre>
+
+<hr />
