@@ -44,6 +44,21 @@ __PACKAGE__->add_unique_constraint("name", ["name"]);
 
 =head1 RELATIONS
 
+=head2 maps
+
+Type: has_many
+
+Related object: L<Hyllekart::Schema::Result::Map>
+
+=cut
+
+__PACKAGE__->has_many(
+  "maps",
+  "Hyllekart::Schema::Result::Map",
+  { "foreign.library_id" => "self.id" },
+  { cascade_copy => 0, cascade_delete => 0 },
+);
+
 =head2 user_libraries
 
 Type: has_many
@@ -60,8 +75,8 @@ __PACKAGE__->has_many(
 );
 
 
-# Created by DBIx::Class::Schema::Loader v0.07010 @ 2013-02-05 12:39:30
-# DO NOT MODIFY THIS OR ANYTHING ABOVE! md5sum:HR2BR1yTHgIpSsrhGBBIdA
+# Created by DBIx::Class::Schema::Loader v0.07010 @ 2013-02-05 12:42:00
+# DO NOT MODIFY THIS OR ANYTHING ABOVE! md5sum:4BABC/bSHes3JdNf7vuudw
 
 __PACKAGE__->many_to_many( users => 'user_libraries', 'user' );
 
