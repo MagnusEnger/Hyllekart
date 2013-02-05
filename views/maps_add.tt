@@ -1,0 +1,6 @@
+[% META pagetitle = 'Add map' %]
+
+<form method="POST" action="/maps/add">
+[% adding = 1 %]
+[% INCLUDE maps_form.tt %]
+</form>

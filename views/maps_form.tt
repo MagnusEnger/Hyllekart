@@ -1,0 +1,11 @@
+<fieldset>
+<legend>About the map</legend>
+<label for="name">Name:</label>
+<input type="text" name="name" id="name" value="[% params.name %][% map.name %]" required/>
+<br />
+[% IF map.id %]
+<input type="hidden" name="map_id" id="map_id" value="[% map.map_id %]"/>
+[% END %]
+<input type="hidden" name="library_id" id="library_id" value="[% library_id %][% map.library_id %]"/>
+</fieldset>
+<input type="submit" id="save" value="Save" />
