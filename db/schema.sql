@@ -39,6 +39,15 @@ CREATE TABLE user_libraries (
     CONSTRAINT user_libraries_fk_2 FOREIGN KEY (library_id) REFERENCES libraries (id) ON DELETE CASCADE
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
+DROP TABLE IF EXISTS maps;
+CREATE TABLE maps (
+    map_id INTEGER AUTO_INCREMENT PRIMARY KEY,
+    name   VARCHAR(255) UNIQUE KEY NOT NULL, 
+    library_id INTEGER NOT NULL,
+    CONSTRAINT maps_fk_1 FOREIGN KEY (library_id) REFERENCES libraries (id) ON DELETE CASCADE
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+
+
 -- Sample data
 -- TODO Split this out into a separate file
 

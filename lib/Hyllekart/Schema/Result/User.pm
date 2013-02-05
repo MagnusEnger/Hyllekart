@@ -91,11 +91,10 @@ __PACKAGE__->has_many(
 );
 
 
-# Created by DBIx::Class::Schema::Loader v0.07010 @ 2013-01-28 15:34:13
-# DO NOT MODIFY THIS OR ANYTHING ABOVE! md5sum:9gluzhHIZ53+XMlerX0caQ
+# Created by DBIx::Class::Schema::Loader v0.07010 @ 2013-02-05 12:39:30
+# DO NOT MODIFY THIS OR ANYTHING ABOVE! md5sum:8DTEmJSOjttye3f2BDRIkA
 
 __PACKAGE__->many_to_many( libraries => 'user_libraries', 'library' );
-
 __PACKAGE__->many_to_many( roles => 'user_roles', 'role' );
 
 1;
