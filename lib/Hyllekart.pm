@@ -354,39 +354,27 @@ get '/maps/add' => require_role admin => sub {
     template 'maps_add', { library_id => 1 }; # FIXME Get this from the user
 };
 
-post '/maps/add' => require_role superadmin => sub {
+post '/maps/add' => require_role admin => sub {
 
     my $name       = param 'name';
-    my $username   = param 'username';
-    my $password1  = param 'password1';
-    my $password2  = param 'password2';
-    my $library_id = param 'library';  
-    
-    # Check the provided data
-    _check_password_length( $password1 )             or return template 'users_add';
-    _check_password_match(  $password1, $password2 ) or return template 'users_add';
+    my $library_id = param 'library_id';  
     
     # Data looks good, try to save it
     try {
-        my $new_user = rset('User')->create({
-            username => $username, 
-            password => _encrypt_password($password1), 
-            name     => $name,
+        my $new_map = rset('Map')->create({
+            name       => $name, 
+            library_id => $library_id,
         });
-        debug "*** Created new user with ID = " . $new_user->id;
-        # debug Dumper $new_user;
-        if ( $library_id ) {
-            rset('UserLibrary')->create({
-                user_id    => $new_user->id, 
-                library_id => $library_id, 
-            });
-        }
-        flash info => 'A new user was added!';
-        redirect '/superadmin';
+        debug "*** Created new map with ID = " . $new_map->id;
+        flash info => 'A new map was added!';
+        redirect '/admin';
     } catch {
         flash error => "Oops, we got an error:<br />$_";
         error "$_";
-        template 'users_add', { name => $name };
+        template 'maps_add', { 
+            name       => $name,
+            library_id => $library_id, 
+        };
     };
 
 };
