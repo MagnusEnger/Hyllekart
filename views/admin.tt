@@ -1,3 +1,20 @@
 [% META pagetitle = 'Admin' %]
 
-<p>Top secret!</p>
+<h2>Maps</h2>
+
+<p><a href="/maps/add"><img src="/images/map_add.png" height="16" width="16" alt="Add" title="Add"> Add a new map</a></p>
+
+[% IF maps.size %]
+    <table>
+    <tr><th>ID</th><th>Name</th><th>Actions</th></tr>
+    [% FOREACH map IN maps %]
+    <tr><td>[% map.id %]</td>
+        <td>[% map.name %]</td>
+        <td>
+            <a href="/maps/edit/[% map.id %]"><img src="/images/map_edit.png" height="16" width="16" alt="Edit" title="Edit"></a>
+            <a href="/maps/delete/[% map.id %]"><img src="/images/map_delete.png" height="16" width="16" alt="Delete" title="Delete"></a>
+        </td>
+    </tr>
+    [% END %]
+    </table>
+[% END %]

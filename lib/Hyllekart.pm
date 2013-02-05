@@ -35,7 +35,10 @@ get '/login' => sub {
 };
 
 get '/admin' => require_role admin => sub { 
-    template 'admin';
+    my @maps = rset('Map')->search({ library_id => 1 });
+    template 'admin', {
+        'maps' => \@maps,
+    };
 };
 
 get '/superadmin' => require_role superadmin => sub { 
@@ -323,6 +326,106 @@ get '/users/delete/:id?' => require_role superadmin => sub {
 };
 
 get '/users/delete_ok/:id?' => require_role superadmin => sub { 
+    
+    # Do the actual delete
+    my $id = param 'id';
+    my $user = rset('User')->find( $id );
+    # TODO Check that this user is ready to be deleted!
+    try {
+        $user->delete;
+        flash info => 'A user was deleted!';
+        info "Deleted user with ID = $id";
+        redirect '/superadmin';
+    } catch {
+        flash error => "Oops, we got an error:<br />$_";
+        error "$_";
+        redirect '/superadmin';
+    };
+    
+};
+
+### Maps
+
+get '/maps/add' => require_role superadmin => sub { 
+    my @libraries = rset('Library')->all;
+    template 'users_add', { libraries => \@libraries };
+};
+
+post '/maps/add' => require_role superadmin => sub {
+
+    my $name       = param 'name';
+    my $username   = param 'username';
+    my $password1  = param 'password1';
+    my $password2  = param 'password2';
+    my $library_id = param 'library';  
+    
+    # Check the provided data
+    _check_password_length( $password1 )             or return template 'users_add';
+    _check_password_match(  $password1, $password2 ) or return template 'users_add';
+    
+    # Data looks good, try to save it
+    try {
+        my $new_user = rset('User')->create({
+            username => $username, 
+            password => _encrypt_password($password1), 
+            name     => $name,
+        });
+        debug "*** Created new user with ID = " . $new_user->id;
+        # debug Dumper $new_user;
+        if ( $library_id ) {
+            rset('UserLibrary')->create({
+                user_id    => $new_user->id, 
+                library_id => $library_id, 
+            });
+        }
+        flash info => 'A new user was added!';
+        redirect '/superadmin';
+    } catch {
+        flash error => "Oops, we got an error:<br />$_";
+        error "$_";
+        template 'users_add', { name => $name };
+    };
+
+};
+
+get '/maps/edit/:id' => require_role superadmin => sub {
+
+    my $id = param 'id';
+    my $user = rset('User')->find( $id );
+    template 'users_edit', { user => $user };
+
+};
+
+post '/maps/edit' => require_role superadmin => sub {
+
+    my $id   = param 'id';
+    my $username = param 'username';
+    my $name     = param 'name';
+    my $user = rset('User')->find( $id );
+    try {
+        $user->set_column('username', $username);
+        $user->set_column('name', $name);
+        $user->update;
+        flash info => 'A user was updated!';
+        redirect '/superadmin';
+    } catch {
+        flash error => "Oops, we got an error:<br />$_";
+        error "$_";
+        template 'users_edit', { user => $user };
+    };
+
+};
+
+get '/maps/delete/:id?' => require_role superadmin => sub { 
+    
+    # Confirm delete
+    my $id = param 'id';
+    my $user = rset('User')->find( $id );
+    template 'users_delete', { user => $user };
+    
+};
+
+get '/maps/delete_ok/:id?' => require_role superadmin => sub { 
     
     # Do the actual delete
     my $id = param 'id';
