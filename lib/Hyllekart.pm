@@ -34,6 +34,10 @@ get '/login' => sub {
     template 'login';
 };
 
+get '/my' => sub {
+    template 'my';
+};
+
 get '/admin' => require_role admin => sub { 
     my @maps = rset('Map')->search({ library_id => 1 });
     template 'admin', {
@@ -346,9 +350,8 @@ get '/users/delete_ok/:id?' => require_role superadmin => sub {
 
 ### Maps
 
-get '/maps/add' => require_role superadmin => sub { 
-    my @libraries = rset('Library')->all;
-    template 'users_add', { libraries => \@libraries };
+get '/maps/add' => require_role admin => sub { 
+    template 'maps_add', { library_id => 1 }; # FIXME Get this from the user
 };
 
 post '/maps/add' => require_role superadmin => sub {
