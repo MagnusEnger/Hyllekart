@@ -2,6 +2,7 @@
 
 DROP TABLE IF EXISTS user_roles;
 DROP TABLE IF EXISTS user_libraries;
+DROP TABLE IF EXISTS maps;
 
 DROP TABLE IF EXISTS users;
 CREATE TABLE users (
@@ -39,7 +40,6 @@ CREATE TABLE user_libraries (
     CONSTRAINT user_libraries_fk_2 FOREIGN KEY (library_id) REFERENCES libraries (id) ON DELETE CASCADE
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
-DROP TABLE IF EXISTS maps;
 CREATE TABLE maps (
     map_id INTEGER AUTO_INCREMENT PRIMARY KEY,
     name   VARCHAR(255) UNIQUE KEY NOT NULL, 
@@ -68,4 +68,8 @@ INSERT INTO user_roles SET user_id = 1, role_id = 1; -- Henrik is admin at Store
 INSERT INTO user_roles SET user_id = 2, role_id = 2; -- Sigrid is superadmin, not connected to a library
 
 -- Users and libraries
-INSERT INTO user_libraries SET user_id = 1, library_id = 1
+INSERT INTO user_libraries SET user_id = 1, library_id = 1;
+
+-- Maps
+INSERT INTO maps SET map_id = 1, library_id = 1, name = 'Ground floor';
+INSERT INTO maps SET map_id = 2, library_id = 1, name = 'First floor';
