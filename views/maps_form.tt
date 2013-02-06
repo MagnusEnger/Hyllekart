@@ -5,7 +5,9 @@
 <br />
 [% IF map.id %]
 <input type="hidden" name="map_id" id="map_id" value="[% map.map_id %]"/>
-[% END %]
+[% ELSE %]
+<br />File: <input type="file" name="map_file" id="map_file"/>
 <input type="hidden" name="library_id" id="library_id" value="[% library_id %][% map.library_id %]"/>
+[% END %]
 </fieldset>
 <input type="submit" id="save" value="Save" />

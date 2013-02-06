@@ -21,6 +21,11 @@ min_pass: 12
 session: YAML
 session_dir: "/tmp/hyllekart-sessions"
 
+# Location for the raw image files, as uploaded by users
+# Include trailing slash
+# Do not use /tmp as that might be cleaned out on server reboot!
+raw_map_dir: "/path/to/dir/"
+
 plugins:
     DBIC:
         default:

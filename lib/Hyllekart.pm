@@ -361,13 +361,27 @@ post '/maps/add' => require_role admin => sub {
     
     # Data looks good, try to save it
     try {
+        
         my $new_map = rset('Map')->create({
             name       => $name, 
             library_id => $library_id,
         });
         debug "*** Created new map with ID = " . $new_map->id;
-        flash info => 'A new map was added!';
-        redirect '/admin';
+        
+        # Save the file in the right location
+        my $dest = config->{raw_map_dir} . $new_map->id . '.png'; # FIXME Make sure we only receive PNG files
+        my $file = upload( 'map_file' );
+        $file->copy_to( $dest );
+        if ( -e $dest ) {
+            debug "*** New image uploaded: $dest";
+            flash info => 'A new map was added!';
+            redirect '/admin';
+        } else {
+            debug "*** Failed to create $dest";
+            flash info => 'Something went wrong, please try again!';
+            redirect '/maps/add';
+        }
+        
     } catch {
         flash error => "Oops, we got an error:<br />$_";
         error "$_";
