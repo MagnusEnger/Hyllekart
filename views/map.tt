@@ -1,0 +1,7 @@
+[% META pagetitle = 'A map' %]
+
+<h2>[% map.name %]</h2>
+
+<p>ID = [% map.id %]</p>
+
+<p><img src="/mapimg/[% map.id %]" style="max-width: 90%" /></p>
