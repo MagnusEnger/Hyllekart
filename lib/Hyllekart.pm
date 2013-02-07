@@ -361,6 +361,16 @@ get '/mapimg/:id' => sub {
     return send_file( $path, system_path => 1 );
 };
 
+# Display a map
+get '/map/:id' => require_role admin => sub {
+    my $map_id = param 'id';
+    unless ( looks_like_number($map_id) ) {
+        return redirect '/';
+    }
+    my $map = rset('Map')->find( $map_id );
+    template 'map', { map => $map };
+};
+
 get '/maps/add' => require_role admin => sub { 
     template 'maps_add', { library_id => 1 }; # FIXME Get this from the user
 };
