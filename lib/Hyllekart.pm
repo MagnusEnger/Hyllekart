@@ -5,6 +5,7 @@ use Dancer::Plugin::DBIC;
 use Dancer::Plugin::FlashMessage;
 use Dancer::Exception qw(:all);
 use Crypt::SaltedHash;
+use Scalar::Util qw(looks_like_number);
 use Data::Dumper; # DEBUG 
 
 our $VERSION = '0.1';
@@ -349,6 +350,16 @@ get '/users/delete_ok/:id?' => require_role superadmin => sub {
 };
 
 ### Maps
+
+# Send a map image
+get '/mapimg/:id' => sub {
+    my $map_id = param 'id';
+    unless ( looks_like_number($map_id) ) {
+        return redirect '/';
+    }
+    my $path = config->{raw_map_dir} . $map_id . '.png';
+    return send_file( $path, system_path => 1 );
+};
 
 get '/maps/add' => require_role admin => sub { 
     template 'maps_add', { library_id => 1 }; # FIXME Get this from the user
