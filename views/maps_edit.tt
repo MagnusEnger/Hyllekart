@@ -1,0 +1,5 @@
+[% META pagetitle = 'Edit map' %]
+
+<form method="POST" action="/maps/edit" enctype="multipart/form-data">
+[% INCLUDE maps_form.tt %]
+</form>

@@ -414,30 +414,28 @@ post '/maps/add' => require_role admin => sub {
 
 };
 
-get '/maps/edit/:id' => require_role superadmin => sub {
+get '/maps/edit/:id' => require_role admin => sub {
 
     my $id = param 'id';
-    my $user = rset('User')->find( $id );
-    template 'users_edit', { user => $user };
+    my $map = rset('Map')->find( $id );
+    template 'maps_edit', { map => $map };
 
 };
 
-post '/maps/edit' => require_role superadmin => sub {
+post '/maps/edit' => require_role admin => sub {
 
-    my $id   = param 'id';
-    my $username = param 'username';
-    my $name     = param 'name';
-    my $user = rset('User')->find( $id );
+    my $map_id = param 'map_id';
+    my $name   = param 'name';
+    my $map = rset('Map')->find( $map_id );
     try {
-        $user->set_column('username', $username);
-        $user->set_column('name', $name);
-        $user->update;
-        flash info => 'A user was updated!';
-        redirect '/superadmin';
+        $map->set_column('name', $name);
+        $map->update;
+        flash info => 'A map was updated!';
+        redirect '/admin';
     } catch {
         flash error => "Oops, we got an error:<br />$_";
         error "$_";
-        template 'users_edit', { user => $user };
+        redirect '/admin';
     };
 
 };
