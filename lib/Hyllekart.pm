@@ -15,6 +15,8 @@ hook 'before' => sub {
     var appname  => config->{appname};
     var min_pass => config->{min_pass};
 
+    # FIXME This is not very good. Might have to create a custom
+    # login route. 
     if ( logged_in_user ) {
         # Get the data for the logged in user
         my $user = logged_in_user;
