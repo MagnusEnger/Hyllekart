@@ -440,30 +440,29 @@ post '/maps/edit' => require_role admin => sub {
 
 };
 
-get '/maps/delete/:id?' => require_role superadmin => sub { 
+get '/maps/delete/:id?' => require_role admin => sub { 
     
     # Confirm delete
     my $id = param 'id';
-    my $user = rset('User')->find( $id );
-    template 'users_delete', { user => $user };
+    my $map = rset('Map')->find( $id );
+    template 'maps_delete', { map => $map };
     
 };
 
-get '/maps/delete_ok/:id?' => require_role superadmin => sub { 
+get '/maps/delete_ok/:id?' => require_role admin => sub { 
     
     # Do the actual delete
     my $id = param 'id';
-    my $user = rset('User')->find( $id );
-    # TODO Check that this user is ready to be deleted!
+    my $map = rset('Map')->find( $id );
     try {
-        $user->delete;
-        flash info => 'A user was deleted!';
-        info "Deleted user with ID = $id";
-        redirect '/superadmin';
+        $map->delete;
+        flash info => 'A map was deleted!';
+        info "Deleted map with ID = $id";
+        redirect '/admin';
     } catch {
         flash error => "Oops, we got an error:<br />$_";
         error "$_";
-        redirect '/superadmin';
+        redirect '/admin';
     };
     
 };
